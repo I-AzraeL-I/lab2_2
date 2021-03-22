@@ -46,4 +46,12 @@ class SimilarityFinderTest {
         double result = similarityFinder.calculateJackardSimilarity(arr1, arr2);
         assertTrue(result >= 0);
     }
+
+    @Test
+    void resultOfJaccardIndexShouldBeEqualToZero() {
+        sequenceSearcher = (elem, sequence) -> SearchResult.builder().withFound(false).build();
+        similarityFinder = new SimilarityFinder(sequenceSearcher);
+        double result = similarityFinder.calculateJackardSimilarity(arr1, arr2);
+        assertEquals(0, result);
+    }
 }
