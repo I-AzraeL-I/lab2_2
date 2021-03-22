@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -34,7 +33,7 @@ class SimilarityFinderTest {
     }
 
     @Test
-    void resultShouldBeEqualTo1() {
+    void resultShouldBeEqualToOne() {
         similarityFinder = new SimilarityFinder(null);
         int[] arr1_1 = {};
         int[] arr2_1 = {};
@@ -43,7 +42,7 @@ class SimilarityFinderTest {
     }
 
     @Test
-    void resultShouldBeGreaterThan0() {
+    void resultShouldBeGreaterOrEqualToZero() {
         sequenceSearcher = (elem, sequence) -> SearchResult.builder().withFound(true).build();
         similarityFinder = new SimilarityFinder(sequenceSearcher);
         double result = similarityFinder.calculateJackardSimilarity(arr1, arr2);
