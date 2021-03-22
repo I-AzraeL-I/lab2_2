@@ -7,6 +7,9 @@ import edu.iis.mto.searcher.SequenceSearcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 class SimilarityFinderTest {
@@ -79,5 +82,29 @@ class SimilarityFinderTest {
         similarityFinder.calculateJackardSimilarity(arr1, arr2);
         int counterValue = (int) sequenceSearcher.getClass().getDeclaredField("counter").get(sequenceSearcher);
         assertEquals(counterValue, arr1.length);
+    }
+
+    @Test
+    void searchMethodShouldBeCalledWithConsecutiveElementsOfFirstArrayAndFullSecondArray() throws NoSuchFieldException, IllegalAccessException {
+        sequenceSearcher = new SequenceSearcher() {
+            public final List<Integer> elemList = new ArrayList<>();
+            public final List<int[]> sequenceList = new ArrayList<>();
+            @Override
+            public SearchResult search(int elem, int[] sequence) {
+                elemList.add(elem);
+                sequenceList.add(sequence);
+                return SearchResult.builder().withFound(true).build();
+            }
+        };
+        similarityFinder = new SimilarityFinder(sequenceSearcher);
+        similarityFinder.calculateJackardSimilarity(arr1, arr2);
+
+        @SuppressWarnings("unchecked")
+        var elemList = (List<Integer>) sequenceSearcher.getClass().getDeclaredField("elemList").get(sequenceSearcher);
+        @SuppressWarnings("unchecked")
+        var sequenceList = (List<int[]>) sequenceSearcher.getClass().getDeclaredField("sequenceList").get(sequenceSearcher);
+
+        assertArrayEquals(elemList.stream().mapToInt(Integer::intValue).toArray(), arr1);
+        sequenceList.forEach(array -> assertArrayEquals(array, arr2));
     }
 }
