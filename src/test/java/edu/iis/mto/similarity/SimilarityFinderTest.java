@@ -68,6 +68,13 @@ class SimilarityFinderTest {
     }
 
     @Test
+    void firstArrayIsNull() {
+        sequenceSearcher = (elem, sequence) -> SearchResult.builder().withFound(true).build();
+        similarityFinder = new SimilarityFinder(sequenceSearcher);
+        assertThrows(NullPointerException.class, () -> similarityFinder.calculateJackardSimilarity(null, arr2));
+    }
+
+    @Test
     void searchMethodShouldBeCalledSameNumberOfTimesAsLengthOfFirstArray() throws NoSuchFieldException, IllegalAccessException {
         sequenceSearcher = new SequenceSearcher() {
             public int counter = 0;
